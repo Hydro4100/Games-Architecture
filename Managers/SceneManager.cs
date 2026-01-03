@@ -1,10 +1,10 @@
-﻿using System;
+﻿using OpenGL_Game.Scenes;
+using OpenTK.Audio.OpenAL; // NEW for Audio
 using OpenTK.Graphics.OpenGL;
-using OpenGL_Game.Scenes;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
-using OpenTK.Audio.OpenAL; // NEW for Audio
+using System;
 
 namespace OpenGL_Game.Managers
 {
@@ -26,7 +26,7 @@ namespace OpenGL_Game.Managers
         public MouseDelegate mouseDelegate;
 
         public SceneManager() : base(GameWindowSettings.Default, new NativeWindowSettings()
-                                { ClientSize = (width, height), Location = (windowXPos, windowYPos) })
+        { ClientSize = (width, height), Location = (windowXPos, windowYPos) })
         {
             var device = ALC.OpenDevice(null);  // NEW for Audio
             ALContextAttributes att = new ALContextAttributes();  // NEW for Audio
@@ -57,7 +57,7 @@ namespace OpenGL_Game.Managers
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
             base.OnMouseDown(e);
-            if(mouseDelegate != null) mouseDelegate.Invoke(e);
+            if (mouseDelegate != null) mouseDelegate.Invoke(e);
         }
 
         protected override void OnMouseMove(MouseMoveEventArgs e)
@@ -99,7 +99,7 @@ namespace OpenGL_Game.Managers
 
         public void StartNewGame()
         {
-            if(scene != null) scene.Close();
+            if (scene != null) scene.Close();
             scene = new GameScene(this);
         }
 
@@ -107,6 +107,12 @@ namespace OpenGL_Game.Managers
         {
             if (scene != null) scene.Close();
             scene = new MainMenuScene(this);
+        }
+
+        public void StartGameOver()
+        {
+            if (scene != null) scene.Close();
+            scene = new GameOverScene(this);
         }
 
         public static int WindowWidth
@@ -129,6 +135,24 @@ namespace OpenGL_Game.Managers
 
             //Load the GUI
             GUI.SetUpGUI(e.Width, e.Height);
+        }
+
+        public void ChangeScene(Scene.SceneTypes sceneType)
+        {
+            switch (sceneType)
+            {
+                case Scene.SceneTypes.SCENE_MAIN_MENU:
+                    StartMenu();
+                    break;
+                case Scene.SceneTypes.SCENE_GAME:
+                    StartNewGame();
+                    break;
+                case Scene.SceneTypes.SCENE_GAME_OVER:
+                    StartGameOver();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 

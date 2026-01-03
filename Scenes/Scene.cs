@@ -1,10 +1,18 @@
-﻿using OpenTK.Windowing.Common;
-using OpenGL_Game.Managers;
+﻿using OpenGL_Game.Managers;
+using OpenTK.Windowing.Common;
 
 namespace OpenGL_Game.Scenes
 {
     abstract class Scene
     {
+        public enum SceneTypes
+        {
+            SCENE_NONE,
+            SCENE_MAIN_MENU,
+            SCENE_GAME,
+            SCENE_GAME_OVER
+        }
+
         protected SceneManager sceneManager;
 
         public Scene(SceneManager sceneManager)

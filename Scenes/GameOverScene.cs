@@ -1,22 +1,21 @@
 ﻿using OpenGL_Game.Managers;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Windowing.Common;
-using OpenTK.Windowing.GraphicsLibraryFramework;
 using SkiaSharp;
 
 namespace OpenGL_Game.Scenes
 {
-    class MainMenuScene : Scene
+    class GameOverScene : Scene
     {
-        public MainMenuScene(SceneManager sceneManager) : base(sceneManager)
+        public GameOverScene(SceneManager sceneManager) : base(sceneManager)
         {
             // Set the title of the window
-            sceneManager.Title = "Main Menu";
+            sceneManager.Title = "Game Over";
             // Set the Render and Update delegates to the Update and Render methods of this class
             sceneManager.renderer = Render;
             sceneManager.updater = Update;
 
-            sceneManager.mouseDelegate += Mouse_BottonPressed;
+            sceneManager.keyboardDownDelegate += Keyboard_KeyDown;
 
             GL.ClearColor(0.2f, 0.75f, 1.0f, 1.0f);
         }
@@ -49,19 +48,14 @@ namespace OpenGL_Game.Scenes
             GUI.Render();
         }
 
-        public void Mouse_BottonPressed(MouseButtonEventArgs e)
+        public void Keyboard_KeyDown(KeyboardKeyEventArgs e)
         {
-            switch (e.Button)
-            {
-                case MouseButton.Left:
-                    sceneManager.ChangeScene(SceneTypes.SCENE_GAME);
-                    break;
-            }
+            sceneManager.ChangeScene(SceneTypes.SCENE_MAIN_MENU);
         }
 
         public override void Close()
         {
-            sceneManager.mouseDelegate -= Mouse_BottonPressed;
+            sceneManager.keyboardDownDelegate -= Keyboard_KeyDown;
         }
     }
 }

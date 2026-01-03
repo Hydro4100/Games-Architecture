@@ -120,7 +120,7 @@ namespace OpenGL_Game.Scenes
         {
             sceneManager.keyboardDownDelegate -= Keyboard_KeyDown;
 
-            // Need to remove assets (except Text) from Resource Manager
+            ResourceManager.RemoveAllAssets();
         }
 
         public void Keyboard_KeyDown(KeyboardKeyEventArgs e)
@@ -140,7 +140,7 @@ namespace OpenGL_Game.Scenes
                     camera.RotateY(0.01f);
                     break;
                 case Keys.M:
-                    sceneManager.StartMenu();
+                    sceneManager.ChangeScene(SceneTypes.SCENE_GAME_OVER);
                     break;
             }
         }
