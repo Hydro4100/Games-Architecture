@@ -64,6 +64,11 @@ namespace OpenGL_Game.Scenes
             newEntity.AddComponent(new ComponentPosition(2.0f, 0.0f, 0.0f));
             newEntity.AddComponent(new ComponentGeometry("Geometry/Wraith_Raider_Starship/Wraith_Raider_Starship.obj"));
             entityManager.AddEntity(newEntity);
+
+            newEntity = new Entity("Intergalactic_Spaceship");
+            newEntity.AddComponent(new ComponentPosition(0.0f, 0.0f, 0.0f));
+            newEntity.AddComponent(new ComponentGeometry("Geometry/Wraith_Raider_Starship/Wraith_Raider_Starship.obj"));
+            entityManager.AddEntity(newEntity);
         }
 
         private void CreateSystems()
