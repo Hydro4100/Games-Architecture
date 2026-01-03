@@ -19,6 +19,7 @@ namespace OpenGL_Game.Scenes
         SystemManager systemManager;
         public Camera camera;
         public static GameScene gameInstance;
+        bool[] keysPressed = new bool[512];
 
         public GameScene(SceneManager sceneManager) : base(sceneManager)
         {
@@ -33,6 +34,7 @@ namespace OpenGL_Game.Scenes
             sceneManager.updater = Update;
             // Set Keyboard events to go to a method in this class
             sceneManager.keyboardDownDelegate += Keyboard_KeyDown;
+            sceneManager.keyboardUpDelegate += Keyboard_KeyUp;
 
             // Enable Depth Testing
             GL.Enable(EnableCap.DepthTest);
@@ -43,7 +45,7 @@ namespace OpenGL_Game.Scenes
             GL.ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
             // Set Camera
-            camera = new Camera(new Vector3(0, 4, 7), new Vector3(0, 0, 0), (float)(sceneManager.Size.X) / (float)(sceneManager.Size.Y), 0.1f, 100f);
+            camera = new Camera(new Vector3(0.0f, 0.5f, 7.0f), new Vector3(0.0f, 0.5f, 0.0f), (float)(sceneManager.Size.X) / (float)(sceneManager.Size.Y), 0.1f, 100f);
 
             CreateEntities();
             CreateSystems();
@@ -93,7 +95,26 @@ namespace OpenGL_Game.Scenes
             dt = (float)e.Time;
             //System.Console.WriteLine("fps=" + (int)(1.0/dt));
 
-            // TODO: Add your update logic here
+            if (keysPressed[(char)Keys.Up])
+            {
+                camera.MoveForward(0.1f);
+            }
+            if (keysPressed[(char)Keys.Down])
+            {
+                camera.MoveForward(-0.1f);
+            }
+            if (keysPressed[(char)Keys.Left])
+            {
+                camera.RotateY(-0.01f);
+            }
+            if (keysPressed[(char)Keys.Right])
+            {
+                camera.RotateY(0.01f);
+            }
+            if (keysPressed[(char)Keys.M])
+            {
+                sceneManager.ChangeScene(SceneTypes.SCENE_GAME_OVER);
+            }
         }
 
         /// <summary>
@@ -119,30 +140,19 @@ namespace OpenGL_Game.Scenes
         public override void Close()
         {
             sceneManager.keyboardDownDelegate -= Keyboard_KeyDown;
+            sceneManager.keyboardUpDelegate -= Keyboard_KeyUp;
 
             ResourceManager.RemoveAllAssets();
         }
 
         public void Keyboard_KeyDown(KeyboardKeyEventArgs e)
         {
-            switch (e.Key)
-            {
-                case Keys.Up:
-                    camera.MoveForward(0.1f);
-                    break;
-                case Keys.Down:
-                    camera.MoveForward(-0.1f);
-                    break;
-                case Keys.Left:
-                    camera.RotateY(-0.01f);
-                    break;
-                case Keys.Right:
-                    camera.RotateY(0.01f);
-                    break;
-                case Keys.M:
-                    sceneManager.ChangeScene(SceneTypes.SCENE_GAME_OVER);
-                    break;
-            }
+            keysPressed[(char)e.Key] = true;
+        }
+
+        public void Keyboard_KeyUp(KeyboardKeyEventArgs e)
+        {
+            keysPressed[(char)e.Key] = false;
         }
     }
 }
